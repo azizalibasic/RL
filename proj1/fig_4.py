@@ -106,21 +106,19 @@ def delta_w_t_v1(Xs, w, a, l, debug=False):
     for i in range(len(Xs)):
         X_Z = Xs[i]
         X, z = X_Z
-        #print("Seq={0}".format(i))
         temp_dw = np.array([0.0,0.0,0.0,0.0,0.0])
-        #print("--")
         for t in range(1, len(X)):
             temp = delta_w_t(X, w, t, a=a, l=l)
-            #print("\tdw_i={0}".format(temp))
             temp_dw += temp
-        Ws.append(temp_dw)
+        w += temp_dw
+        #Ws.append(temp_dw)
         if debug: print("t={0}, dw={1}".format(t, temp_dw))
 
     # return new w
-    new_w = np.array(Ws)
-    new_w = np.sum(new_w, axis=0)
+    #new_w = np.array(Ws)
+    #new_w = np.sum(new_w, axis=0)
 
-    return new_w
+    return w
 
 
 def run_v1(a, l, debug=False):
@@ -139,21 +137,22 @@ def run_v1(a, l, debug=False):
     #training_sets = training_sets[0:3]
 
     # now run
-    ALL_W = []
+    ALL_WEIGHTS = []
     for i in range(0,1):
-        w = np.array([0.5,0.5,0.5,0.5,0.5],dtype=np.float)
         #print("finished i={0}".format(i))
         for j, train_set in enumerate(training_sets):
-            for g in range(0,10):
+            w = np.array([0.5,0.5,0.5,0.5,0.5],dtype=np.float)
+            for g in range(0,1):
                 d_w = delta_w_t_v1(train_set, w, a, l, debug=False)
 
-                w += d_w
+                w = d_w
+                ALL_WEIGHTS.append(w)
                 if debug: print("train_set_i={0}, old_w={1}, new_w={2}".format(j, w-d_w, w))
                 #if debug: print("\td_w={0}".format(d_w))
                 #if debug: print("")
-            ALL_W.append(w)
 
-    new_w = np.array(ALL_W)
+
+    new_w = np.array(ALL_WEIGHTS)
     new_w = np.average(new_w, axis=0)
     return new_w
 
@@ -164,26 +163,30 @@ def run_v1(a, l, debug=False):
 
 if __name__ == "__main__":
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
-    ALPHA = 0.001
-    w0 = run_v1(a=ALPHA, l=0.0, debug=True)
-    w1 = run_v1(a=ALPHA, l=0.1, debug=True)
-    w3 = run_v1(a=ALPHA, l=0.3, debug=True)
-    w5 = run_v1(a=ALPHA, l=0.5, debug=True)
-    w7 = run_v1(a=ALPHA, l=0.7, debug=True)
-    w10 = run_v1(a=ALPHA, l=1.0, debug=True)
+    ALPHA = 0.1
 
-    ws = [w0, w1, w3, w5, w7, w10]
+    plot_data = {
+        "1": [],
+        '0': [],
+        "0.8": [],
+        "0.3": [],
 
-    errors = []
+    }
+    ALPHAS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+    for a in ALPHAS:
+        for l in [1,0,0.8,0.3]:
+            w = run_v1(a=a, l=l, debug=True)
+            k = str(l)
+            rmse = sqrt(mean_squared_error(EXPECTED, w))
+            plot_data[k].append((rmse))
 
-    for i in range(len(ws)):
-        rmse = sqrt(mean_squared_error(EXPECTED, ws[i]))
-        errors.append(rmse)
+    for k in plot_data:
+        plt.plot(ALPHAS, plot_data[k])
 
-    plt.plot([0,.1,.3,.5,.7,1], errors)
     plt.xlabel('Lambda(s)')
     plt.ylabel('Errors (RMSE)')
-    plt.title('Figure 3')
-    plt.savefig('figure3.png')
+    plt.title('Figure 4')
+    plt.legend(["lambda=1", "lambda=0.0", "lambda=0.8", "lambda=0.3"])
+    plt.savefig('figure4.png')
 
 
