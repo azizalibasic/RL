@@ -164,7 +164,7 @@ def run_v1(a, l, debug=False):
 
 if __name__ == "__main__":
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
-    ALPHA = 0.001
+    ALPHA = 0.0025
     w0 = run_v1(a=ALPHA, l=0.0, debug=True)
     w1 = run_v1(a=ALPHA, l=0.1, debug=True)
     w3 = run_v1(a=ALPHA, l=0.3, debug=True)

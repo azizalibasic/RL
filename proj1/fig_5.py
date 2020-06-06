@@ -163,32 +163,33 @@ def run_v1(a, l, debug=False):
 
 if __name__ == "__main__":
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
+    ALPHA = 0.1
 
-    plot_data = {
-        "1": [],
-        '0': [],
-        "0.8": [],
-        "0.3": [],
+    # MIN
+    # for k=1, a=0.2
+    # MIN
+    # for k=0, a=0.3
+    # MIN
+    # for k=0.8, a=0.3
+    # MIN
+    # for k=0.3, a=0.3
 
-    }
-    ALPHAS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
-    for a in ALPHAS:
-        for l in [1,0,0.8,0.3]:
-            w = run_v1(a=a, l=l, debug=True)
-            k = str(l)
-            rmse = sqrt(mean_squared_error(EXPECTED, w))
-            plot_data[k].append((rmse))
+    ERRORS = []
+    #ALPHAS = [0.3]
+    #for a in ALPHAS:
+    L_AS = [(0.0,.3),(.15,.3),(0.3, .3),(.4,.3),(.5,.3),(.6,.3),(.7,.3),(0.8,.3),(0.9,.3),(1,.2)]
+    for l,a in L_AS:
+        w = run_v1(a=a, l=l, debug=True)
+        rmse = sqrt(mean_squared_error(EXPECTED, w))
+        ERRORS.append(rmse)
 
-    for k in plot_data:
-        data = plot_data[k]
-        plt.plot(ALPHAS, data)
-        min_data_ind = np.argmin(np.array(data))
-        print("MIN for k={0}, a={1}".format(k, ALPHAS[min_data_ind]))
+    LS = [l for (l,a) in L_AS]
+    plt.plot(LS, ERRORS)
 
-    plt.xlabel('Alphas(s)')
-    plt.ylabel('Errors (RMSE)')
-    plt.title('Figure 4')
-    plt.legend(["lambda=1", "lambda=0.0", "lambda=0.8", "lambda=0.3"])
-    plt.savefig('figure4.png')
+    plt.xlabel('Lambda(s)')
+    plt.ylabel('Error Using Best Alpha (RMSE)')
+    plt.title('Figure 5')
+    #plt.legend(["lambda=1", "lambda=0.0", "lambda=0.8", "lambda=0.3"])
+    plt.savefig('figure5.png')
 
 
