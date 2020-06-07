@@ -5,8 +5,6 @@ from math import sqrt
 
 import matplotlib.pyplot as plt
 
-np.random.seed(0)
-
 S = {
     "B": np.array([1,0,0,0,0]).T,
     "C": np.array([0,1,0,0,0]).T,
@@ -161,7 +159,8 @@ def run_v1(a, l, debug=False):
 #un_v1(a=.001,l=0.0, debug=True)
 
 
-if __name__ == "__main__":
+def main5():
+    np.random.seed(0)
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
     ALPHA = 0.1
 
@@ -191,5 +190,9 @@ if __name__ == "__main__":
     plt.title('Figure 5')
     #plt.legend(["lambda=1", "lambda=0.0", "lambda=0.8", "lambda=0.3"])
     plt.savefig('figure5.png')
+    plt.clf()
+
+# if __name__ == "__main__":
+#     main5()
 
 

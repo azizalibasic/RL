@@ -5,7 +5,7 @@ from math import sqrt
 
 import matplotlib.pyplot as plt
 
-np.random.seed(0)
+#np.random.seed(0)
 
 S = {
     "B": np.array([1,0,0,0,0]).T,
@@ -144,7 +144,7 @@ def run_v1(a, l, debug=False):
         w = np.array([0.5,0.5,0.5,0.5,0.5],dtype=np.float)
         #print("finished i={0}".format(i))
         for j, train_set in enumerate(training_sets):
-            for g in range(0,10):
+            for g in range(0,20):
                 d_w = delta_w_t_v1(train_set, w, a, l, debug=False)
 
                 w += d_w
@@ -162,7 +162,8 @@ def run_v1(a, l, debug=False):
 #un_v1(a=.001,l=0.0, debug=True)
 
 
-if __name__ == "__main__":
+def main3():
+    np.random.seed(0)
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
     ALPHA = 0.0025
     w0 = run_v1(a=ALPHA, l=0.0, debug=True)
@@ -185,5 +186,9 @@ if __name__ == "__main__":
     plt.ylabel('Errors (RMSE)')
     plt.title('Figure 3')
     plt.savefig('figure3.png')
+    plt.clf()
+
+# if __name__ == "__main__":
+#     main3()
 
 

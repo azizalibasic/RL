@@ -5,7 +5,7 @@ from math import sqrt
 
 import matplotlib.pyplot as plt
 
-np.random.seed(0)
+#np.random.seed(0)
 
 S = {
     "B": np.array([1,0,0,0,0]).T,
@@ -160,8 +160,8 @@ def run_v1(a, l, debug=False):
 #run_v1(a=0.01,l=.2, debug=True)
 #un_v1(a=.001,l=0.0, debug=True)
 
-
-if __name__ == "__main__":
+def main4():
+    np.random.seed(0)
     EXPECTED = [1/6., 1/3., 1/2., 2/3., 5/6.]
 
     plot_data = {
@@ -179,7 +179,7 @@ if __name__ == "__main__":
             rmse = sqrt(mean_squared_error(EXPECTED, w))
             plot_data[k].append((rmse))
 
-    for k in plot_data:
+    for k in ["1","0","0.8","0.3"]:
         data = plot_data[k]
         plt.plot(ALPHAS, data)
         min_data_ind = np.argmin(np.array(data))
@@ -190,5 +190,9 @@ if __name__ == "__main__":
     plt.title('Figure 4')
     plt.legend(["lambda=1", "lambda=0.0", "lambda=0.8", "lambda=0.3"])
     plt.savefig('figure4.png')
+    plt.clf()
+
+# if __name__ == "__main__":
+#     main4()
 
 
